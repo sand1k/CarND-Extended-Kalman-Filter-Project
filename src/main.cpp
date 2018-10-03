@@ -14,16 +14,16 @@ using json = nlohmann::json;
 // If there is data the JSON object in string format will be returned,
 // else the empty string "" will be returned.
 std::string hasData(std::string s) {
-  auto found_null = s.find("null");
-  auto b1 = s.find_first_of("[");
-  auto b2 = s.find_first_of("]");
-  if (found_null != std::string::npos) {
+    auto found_null = s.find("null");
+    auto b1 = s.find_first_of("[");
+    auto b2 = s.find_first_of("]");
+    if (found_null != std::string::npos) {
+        return "";
+    }
+    else if (b1 != std::string::npos && b2 != std::string::npos) {
+        return s.substr(b1, b2 - b1 + 1);
+    }
     return "";
-  }
-  else if (b1 != std::string::npos && b2 != std::string::npos) {
-    return s.substr(b1, b2 - b1 + 1);
-  }
-  return "";
 }
 
 int main()
@@ -67,28 +67,28 @@ int main()
     	  iss >> sensor_type;
 
     	  if (sensor_type.compare("L") == 0) {
-      	  		meas_package.sensor_type_ = MeasurementPackage::LASER;
-          		meas_package.raw_measurements_ = VectorXd(2);
-          		float px;
-      	  		float py;
-          		iss >> px;
-          		iss >> py;
-          		meas_package.raw_measurements_ << px, py;
-          		iss >> timestamp;
-          		meas_package.timestamp_ = timestamp;
-          } else if (sensor_type.compare("R") == 0) {
-
-      	  		meas_package.sensor_type_ = MeasurementPackage::RADAR;
-          		meas_package.raw_measurements_ = VectorXd(3);
-          		float ro;
-      	  		float theta;
-      	  		float ro_dot;
-          		iss >> ro;
-          		iss >> theta;
-          		iss >> ro_dot;
-          		meas_package.raw_measurements_ << ro,theta, ro_dot;
-          		iss >> timestamp;
-          		meas_package.timestamp_ = timestamp;
+              meas_package.sensor_type_ = MeasurementPackage::LASER;
+              meas_package.raw_measurements_ = VectorXd(2);
+              float px;
+              float py;
+              iss >> px;
+              iss >> py;
+              meas_package.raw_measurements_ << px, py;
+              iss >> timestamp;
+              meas_package.timestamp_ = timestamp;
+          }
+          else if (sensor_type.compare("R") == 0) {
+              meas_package.sensor_type_ = MeasurementPackage::RADAR;
+              meas_package.raw_measurements_ = VectorXd(3);
+              float ro;
+              float theta;
+              float ro_dot;
+              iss >> ro;
+              iss >> theta;
+              iss >> ro_dot;
+              meas_package.raw_measurements_ << ro,theta, ro_dot;
+              iss >> timestamp;
+              meas_package.timestamp_ = timestamp;
           }
           float x_gt;
     	  float y_gt;
