@@ -89,9 +89,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
       */
       float ro = raw_meas[0];
       float theta = raw_meas[1];
-      float ro_dot = raw_meas[2];
+      // float ro_dot = raw_meas[2];
 
-      ekf_.x_ << ro * cos(theta), ro * sin(theta), ro_dot * cos(theta), ro_dot * sin(theta);
+      ekf_.x_ << ro * cos(theta), ro * sin(theta), 0, 0;
     }
     else if (measurement_pack.sensor_type_ == MeasurementPackage::LASER) {
       /**
@@ -150,7 +150,9 @@ void FusionEKF::ProcessMeasurement(const MeasurementPackage &measurement_pack) {
 
   if (measurement_pack.sensor_type_ == MeasurementPackage::RADAR) {
     // Radar updates
+    ekf_.H_ = tools.CalculateJacobian(ekf_.x_);
     ekf_.R_ = R_radar_; // measurement covariance matrix
+    ekf_.UpdateEKF(measurement_pack.raw_measurements_);
   } else {
     // Laser updates
     ekf_.H_ = H_laser_;
